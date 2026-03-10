@@ -1,5 +1,28 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship
 from .database import Base
+
+
+class Role(Base):
+    __tablename__ = "roles"
+
+    role_id = Column(Integer, primary_key=True, index=True)
+    role_name = Column(String, unique=True)
+
+    # permissions stored as comma separated string
+    permissions = Column(String)
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    user_id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, unique=True)
+    password = Column(String)
+
+    role_id = Column(Integer, ForeignKey("roles.role_id"))
+
+    role = relationship("Role")
 
 
 class Employee(Base):
